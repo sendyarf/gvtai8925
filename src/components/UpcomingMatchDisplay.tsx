@@ -19,12 +19,12 @@ export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ matc
         <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 lg:rounded-lg lg:border-2 lg:border-dashed lg:border-slate-800 p-4 sm:p-8 relative">
             <button 
                 onClick={onClose}
-                className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors"
+                className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-slate-300 hover:text-amber-500 transition-colors"
             >
                 <BackIcon className="w-5 h-5" />
                 Schedule
             </button>
-            <span className="text-sm sm:text-base font-semibold text-blue-500 uppercase tracking-wider">{match.league}</span>
+            <span className="text-sm sm:text-base font-semibold text-amber-400 uppercase tracking-wider">{match.league}</span>
 
             <div className="flex items-center justify-center gap-4 sm:gap-8 my-8 w-full max-w-lg">
                 <div className="flex flex-col sm:flex-row items-center gap-3 flex-1 justify-end">

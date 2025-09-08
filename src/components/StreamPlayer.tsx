@@ -39,7 +39,7 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
             <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 lg:rounded-lg p-4 sm:p-8 relative">
                 <button
                     onClick={onClose}
-                    className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors"
+                    className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-slate-300 hover:text-amber-500 transition-colors"
                 >
                     <BackIcon className="w-5 h-5" />
                     Schedule
@@ -64,7 +64,7 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
                         <button
                             key={index}
                             onClick={() => onWatchStream(server.url)}
-                            className="block text-center py-2.5 px-2 text-sm bg-slate-800 rounded-md text-slate-200 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-semibold"
+                            className="block text-center py-2.5 px-2 text-sm bg-slate-800 rounded-md text-slate-200 hover:bg-amber-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all duration-200 font-semibold"
                         >
                             {server.label || `Server ${index + 1}`}
                         </button>
@@ -81,7 +81,7 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
              <div className="p-4 bg-slate-900 lg:border-b lg:border-slate-800 flex items-center justify-between lg:hidden">
                 <button
                     onClick={onClose}
-                    className="flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors"
+                    className="flex items-center gap-1 text-sm text-slate-300 hover:text-amber-500 transition-colors"
                 >
                     <BackIcon className="w-5 h-5" />
                     Schedule
@@ -114,8 +114,8 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
                                 onClick={() => onWatchStream(server.url)}
                                 className={`block text-center py-2 px-1 text-xs sm:text-sm rounded-md transition-all duration-200 font-medium truncate ${
                                     isActive 
-                                    ? 'bg-blue-600 text-white cursor-default' 
-                                    : 'bg-slate-700 text-slate-200 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    ? 'bg-amber-500 text-slate-900 cursor-default' 
+                                    : 'bg-slate-700 text-slate-200 hover:bg-amber-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500'
                                 }`}
                                 disabled={isActive}
                             >

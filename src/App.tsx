@@ -247,7 +247,7 @@ const App: React.FC = () => {
           )}
           {!isLoading && !error && sortedDates.map(date => (
             <div key={date}>
-              <h2 className="text-lg font-bold text-blue-500 uppercase tracking-wider mb-4 px-2">
+              <h2 className="text-lg font-bold text-amber-400 uppercase tracking-wider mb-4 px-2">
                 {formatDate(date)}
               </h2>
               <div className="flex flex-col gap-3">
@@ -300,7 +300,7 @@ const App: React.FC = () => {
       {/* Toast Notification */}
       {showUpdateToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-fade-in-out">
-          <div className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg">
+          <div className="bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg shadow-lg">
             Jadwal telah diperbarui.
           </div>
         </div>

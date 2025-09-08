@@ -34,7 +34,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime
   };
 
   const baseRing = "ring-1 ring-inset ring-slate-800";
-  const selectedRing = "ring-2 ring-inset ring-blue-500";
+  const selectedRing = "ring-2 ring-inset ring-amber-500";
 
   return (
     <div 
@@ -51,7 +51,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime
                   <div className="relative">
                     <button 
                       onClick={handleCopyLink} 
-                      className="text-slate-500 hover:text-blue-500 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" 
+                      className="text-slate-500 hover:text-amber-500 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 rounded" 
                       title="Copy link to match"
                       aria-label="Copy link to match"
                     >
