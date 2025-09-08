@@ -88,7 +88,6 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
                     className="w-full h-full border-0"
                     allow="encrypted-media; autoplay; fullscreen"
                     allowFullScreen
-                    sandbox="allow-forms allow-scripts allow-same-origin allow-presentation"
                 ></iframe>
             </div>
         </div>
