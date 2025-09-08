@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import type { MatchWithState } from '../types';
-import { CountdownTimer } from './CountdownTimer';
 
 interface MatchCardProps {
   match: MatchWithState;
@@ -107,7 +106,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, isSelected, isActiv
             </div>
         </div>
       
-        <div className={`px-4 pb-4 transition-all duration-300 ${isLive ? 'pt-2' : 'pt-4'}`}>
+        <div className={`px-4 pb-4 transition-all duration-300 pt-2`}>
             {isLive ? (
                 <button
                     onClick={handleWatchClick}
@@ -119,9 +118,8 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, isSelected, isActiv
                     <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${showServers ? 'rotate-180' : ''}`} />
                 </button>
             ) : (
-                <div className="flex flex-col items-center gap-1 text-center">
-                    <span className="text-xs text-slate-400">STARTS IN</span>
-                    <CountdownTimer targetTime={match.startTime} size="small" />
+                <div className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold bg-slate-800 text-slate-400 rounded-md">
+                    UPCOMING
                 </div>
             )}
         </div>
