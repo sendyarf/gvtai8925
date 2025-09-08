@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 interface CountdownTimerProps {
   targetTime: number; // UTC timestamp
-  size?: 'small' | 'large' | 'hero';
+  size?: 'small' | 'large' | 'hero' | 'matchday';
 }
 
 const calculateTimeLeft = (targetTime: number) => {
@@ -44,6 +44,18 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetTime, size
   const formattedHours = String(totalHours).padStart(2, '0');
   const formattedMinutes = String(minutes).padStart(2, '0');
   const formattedSeconds = String(seconds).padStart(2, '0');
+
+  if (size === 'matchday') {
+    return (
+      <div className="font-mono text-3xl font-bold text-text-primary tracking-tighter">
+        <span>{formattedHours}</span>
+        <span className="animate-pulse">:</span>
+        <span>{formattedMinutes}</span>
+        <span className="animate-pulse">:</span>
+        <span>{formattedSeconds}</span>
+      </div>
+    );
+  }
 
   if (size === 'hero') {
     return (

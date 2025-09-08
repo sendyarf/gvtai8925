@@ -29,22 +29,22 @@ export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ matc
                 
                 {/* Left Column: Time Info */}
                 <div className="flex flex-col items-center lg:items-start text-center lg:text-left pt-12 lg:pt-0">
-                    <span className="text-sm text-text-secondary mb-2 uppercase tracking-widest">STARTS IN</span>
-                    <CountdownTimer targetTime={match.startTime} size="hero" />
+                    <span className="text-xl font-medium text-text-primary mb-1">STARTS IN</span>
+                    <CountdownTimer targetTime={match.startTime} size="matchday" />
 
                     <div className="mt-8 lg:mt-12">
-                        <h2 className="text-7xl lg:text-8xl font-extrabold leading-none text-text-primary">MATCH</h2>
-                        <h2 className="text-7xl lg:text-8xl font-extrabold leading-none text-text-primary">DAY</h2>
-                        <div className="w-48 h-1.5 bg-accent mt-4"></div>
+                        <h2 className="text-5xl font-extrabold leading-none text-text-primary">MATCH</h2>
+                        <h2 className="text-5xl font-extrabold leading-none text-text-primary">DAY</h2>
+                        <div className="w-full h-1.5 bg-accent mt-4"></div>
                     </div>
                 </div>
 
                 {/* Right Column: Match Info */}
                 <div className="flex flex-col items-center justify-center text-center">
-                    <span className="text-base font-semibold text-accent uppercase tracking-wider mb-6">{match.league}</span>
-                    <div className="flex items-center justify-center gap-8 sm:gap-16">
-                        <img src={match.team1.logo} alt={match.team1.name} className="w-32 h-32 sm:w-40 sm:h-40 object-contain"/>
-                        <img src={match.team2.logo} alt={match.team2.name} className="w-32 h-32 sm:w-40 sm:h-40 object-contain"/>
+                    <span className="text-xl font-medium text-text-primary mb-6">{match.league}</span>
+                    <div className="flex items-center justify-center gap-8">
+                        <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain"/>
+                        <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain"/>
                     </div>
                 </div>
             </div>
