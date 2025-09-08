@@ -20,3 +20,10 @@ export interface Match {
   duration: string;
   servers: Server[];
 }
+
+export type MatchStatus = 'upcoming' | 'live';
+
+export interface MatchWithState extends Match {
+  status: MatchStatus;
+  startTime: number;
+}

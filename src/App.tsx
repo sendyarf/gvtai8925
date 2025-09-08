@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Header } from './components/Header';
-import { MatchCard, MatchStatus } from './components/StoryForm';
+import { MatchCard } from './components/StoryForm';
 import { LoadingSpinner } from './components/LoadingDisplay';
 import { ErrorMessage } from './components/ErrorMessage';
 import { StreamPlayer } from './components/StreamPlayer';
-import type { Match } from './types';
-
-interface MatchWithState extends Match {
-  status: MatchStatus;
-  startTime: number;
-}
+import { UpcomingMatchDisplay } from './components/UpcomingMatchDisplay';
+import type { Match, MatchWithState, MatchStatus } from './types';
 
 const SCHEDULE_URL = 'https://weekendsch.pages.dev/sch/schedulegvt.json';
 
@@ -133,8 +129,9 @@ const App: React.FC = () => {
       setSelectedMatch(match);
       if(match.status !== 'live') {
           setActiveStreamUrl(null);
-          if (!isDesktop) {
-            setMobileView('schedule');
+           if (!isDesktop) {
+            // For upcoming matches on mobile, switch to player view to see countdown
+            setMobileView('player');
           }
       }
   }, [isDesktop]);
@@ -220,8 +217,6 @@ const App: React.FC = () => {
                   <MatchCard 
                       key={match.id} 
                       match={match}
-                      status={match.status}
-                      startTime={match.startTime}
                       isSelected={selectedMatch?.id === match.id}
                       isActiveStream={selectedMatch?.id === match.id && activeStreamUrl !== null}
                       onSelect={() => handleSelectMatch(match)}
@@ -237,7 +232,11 @@ const App: React.FC = () => {
 
   const PlayerPanel = (
        <main className="w-full flex-1 flex items-center justify-center p-0 lg:p-4 bg-slate-950 h-screen">
-          <StreamPlayer match={selectedMatch} streamUrl={activeStreamUrl} onClose={handleClosePlayer} />
+          {selectedMatch?.status === 'upcoming' ? (
+              <UpcomingMatchDisplay match={selectedMatch} onClose={handleClosePlayer} />
+          ) : (
+              <StreamPlayer match={selectedMatch} streamUrl={activeStreamUrl} onClose={handleClosePlayer} />
+          )}
         </main>
   );
 

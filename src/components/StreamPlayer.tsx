@@ -1,8 +1,8 @@
 import React from 'react';
-import type { Match } from '../types';
+import type { MatchWithState } from '../types';
 
 interface StreamPlayerProps {
-    match: Match | null;
+    match: MatchWithState | null;
     streamUrl: string | null;
     onClose: () => void;
 }
@@ -21,16 +21,36 @@ const BackIcon: React.FC<{ className?: string }> = ({ className }) => (
 
 
 export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, onClose }) => {
-    if (!streamUrl || !match) {
+    // Case 1: No match selected at all.
+    if (!match) {
         return (
-            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 rounded-lg border-2 border-dashed border-slate-800">
+            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 rounded-lg border-2 border-dashed border-slate-800 p-4">
                 <GovoetLogo className="w-24 h-24 text-slate-700" />
                 <h2 className="mt-6 text-2xl font-bold text-slate-300">Welcome to GOVOET</h2>
                 <p className="mt-2 text-slate-500">Select a live match from the schedule to begin streaming.</p>
             </div>
         );
     }
+    
+    // Case 2: A live match is selected, but no server has been chosen yet.
+    if (!streamUrl) {
+         return (
+            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 rounded-lg border-2 border-dashed border-slate-800 p-4">
+                <GovoetLogo className="w-24 h-24 text-slate-700" />
+                <h2 className="mt-6 text-2xl font-bold text-slate-300">{match.team1.name} vs {match.team2.name}</h2>
+                <p className="mt-2 text-slate-500">The match is live! Select a server from the list to begin streaming.</p>
+                 <button 
+                    onClick={onClose}
+                    className="lg:hidden flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors mt-8"
+                >
+                    <BackIcon className="w-5 h-5" />
+                    Back to Schedule
+                </button>
+            </div>
+        );
+    }
 
+    // Case 3: Stream is active
     return (
         <div className="w-full h-full flex flex-col bg-black lg:rounded-lg overflow-hidden shadow-2xl shadow-black/50 lg:border lg:border-slate-800">
             <div className="p-4 bg-slate-900 lg:border-b lg:border-slate-800 flex items-center justify-between">

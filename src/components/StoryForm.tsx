@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import type { Match } from '../types';
+import type { MatchWithState } from '../types';
 import { CountdownTimer } from './CountdownTimer';
 
-export type MatchStatus = 'upcoming' | 'live';
-
 interface MatchCardProps {
-  match: Match;
-  status: MatchStatus;
-  startTime: number;
+  match: MatchWithState;
   isSelected: boolean;
   isActiveStream: boolean;
   onSelect: () => void;
@@ -27,10 +23,10 @@ const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, isSelected, isActiveStream, onSelect, onWatch }) => {
+export const MatchCard: React.FC<MatchCardProps> = ({ match, isSelected, isActiveStream, onSelect, onWatch }) => {
   const [showServers, setShowServers] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const isLive = status === 'live';
+  const isLive = match.status === 'live';
 
   // Collapse or expand server list based on selection and active stream state
   useEffect(() => {
@@ -125,7 +121,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, 
             ) : (
                 <div className="flex flex-col items-center gap-1 text-center">
                     <span className="text-xs text-slate-400">STARTS IN</span>
-                    <CountdownTimer targetTime={startTime} />
+                    <CountdownTimer targetTime={match.startTime} size="small" />
                 </div>
             )}
         </div>
