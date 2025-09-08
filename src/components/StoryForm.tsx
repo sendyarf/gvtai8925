@@ -33,32 +33,32 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime
     });
   };
 
-  const baseRing = "ring-1 ring-inset ring-slate-800";
-  const selectedRing = "ring-2 ring-inset ring-amber-500";
+  const baseRing = "ring-1 ring-inset ring-white/10";
+  const selectedRing = "ring-2 ring-inset ring-accent";
 
   return (
     <div 
         id={`match-${match.id}`}
-        className={`bg-slate-900/50 rounded-lg transition-all duration-300 ${isSelected ? selectedRing : baseRing} cursor-pointer hover:ring-slate-700`}
+        className={`bg-surface rounded-lg transition-all duration-300 ${isSelected ? selectedRing : baseRing} cursor-pointer hover:ring-white/20`}
         onClick={onSelect}
         aria-labelledby={`match-title-${match.id}`}
     >
         <div className="p-4">
-            <div className="flex justify-between items-center text-xs text-slate-400 mb-3">
+            <div className="flex justify-between items-center text-xs text-text-secondary mb-3">
                 <span className="truncate pr-2">{match.league}</span>
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <span className="font-mono">{new Date(displayTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   <div className="relative">
                     <button 
                       onClick={handleCopyLink} 
-                      className="text-slate-500 hover:text-amber-500 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 rounded" 
+                      className="text-text-secondary hover:text-secondary-accent transition-colors focus:outline-none focus:ring-2 focus:ring-accent rounded" 
                       title="Copy link to match"
                       aria-label="Copy link to match"
                     >
                         <ShareIcon className="w-4 h-4" />
                     </button>
                     {isCopied && (
-                        <div className="absolute z-10 -top-8 right-1/2 translate-x-1/2 whitespace-nowrap bg-slate-700 text-white text-xs px-2 py-1 rounded-md shadow-lg animate-fade-in-out">
+                        <div className="absolute z-10 -top-8 right-1/2 translate-x-1/2 whitespace-nowrap bg-surface text-text-primary text-xs px-2 py-1 rounded-md shadow-lg animate-fade-in-out ring-1 ring-white/10">
                             Copied!
                         </div>
                     )}
@@ -68,13 +68,13 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime
             
             <div id={`match-title-${match.id}`} className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-3 flex-1 justify-end">
-                    <span className="font-semibold text-sm sm:text-base text-right">{match.team1.name}</span>
+                    <span className="font-semibold text-sm sm:text-base text-right text-text-primary">{match.team1.name}</span>
                     <img src={match.team1.logo} alt={match.team1.name} className="w-8 h-8 object-contain"/>
                 </div>
-                <span className="text-sm font-bold text-slate-500">VS</span>
+                <span className="text-sm font-bold text-text-secondary">VS</span>
                 <div className="flex items-center gap-3 flex-1">
                     <img src={match.team2.logo} alt={match.team2.name} className="w-8 h-8 object-contain"/>
-                    <span className="font-semibold text-sm sm:text-base text-left">{match.team2.name}</span>
+                    <span className="font-semibold text-sm sm:text-base text-left text-text-primary">{match.team2.name}</span>
                 </div>
             </div>
         </div>
@@ -82,13 +82,13 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime
         <div className="px-4 pb-4">
             {isLive ? (
                 <div
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold bg-green-600 text-white rounded-md"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold bg-accent text-background rounded-md"
                 >
-                    <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                    <span className="w-2 h-2 bg-background rounded-full animate-pulse"></span>
                     LIVE
                 </div>
             ) : (
-                <div className="text-center py-2 bg-slate-800 text-slate-300 rounded-md text-sm font-bold uppercase tracking-wider">
+                <div className="text-center py-2 bg-white/5 text-text-secondary rounded-md text-sm font-bold uppercase tracking-wider">
                     Upcoming
                 </div>
             )}

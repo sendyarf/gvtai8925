@@ -231,7 +231,7 @@ const App: React.FC = () => {
   const sortedDates = Object.keys(groupedMatches).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
   const SchedulePanel = (
-      <aside className="w-full lg:w-[35%] lg:max-w-md xl:max-w-lg bg-slate-950 lg:border-l lg:border-slate-800/50 flex flex-col h-screen">
+      <aside className="w-full lg:w-[35%] lg:max-w-md xl:max-w-lg bg-background lg:border-l lg:border-white/10 flex flex-col h-screen">
         <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
         <div className="flex-grow overflow-y-auto p-4 space-y-8">
           {isLoading && <LoadingSpinner />}
@@ -239,15 +239,15 @@ const App: React.FC = () => {
           {!isLoading && !error && sortedDates.length === 0 && (
             <div className="text-center py-16 px-6">
                 {searchQuery ? (
-                     <p className="text-slate-400">No matches found for "<span className="font-semibold text-slate-300">{searchQuery}</span>".</p>
+                     <p className="text-text-secondary">No matches found for "<span className="font-semibold text-text-primary">{searchQuery}</span>".</p>
                 ) : (
-                    <p className="text-slate-400">No matches scheduled. Please check back later.</p>
+                    <p className="text-text-secondary">No matches scheduled. Please check back later.</p>
                 )}
             </div>
           )}
           {!isLoading && !error && sortedDates.map(date => (
             <div key={date}>
-              <h2 className="text-lg font-bold text-amber-400 uppercase tracking-wider mb-4 px-2">
+              <h2 className="text-lg font-bold text-accent uppercase tracking-wider mb-4 px-2">
                 {formatDate(date)}
               </h2>
               <div className="flex flex-col gap-3">
@@ -269,7 +269,7 @@ const App: React.FC = () => {
   );
 
   const PlayerPanel = (
-       <main className="w-full flex-1 flex items-center justify-center p-0 lg:p-4 bg-slate-950 h-screen">
+       <main className="w-full flex-1 flex items-center justify-center p-0 lg:p-4 bg-background h-screen">
           {selectedMatch?.status === 'upcoming' ? (
             <UpcomingMatchDisplay match={selectedMatch} onClose={handleClosePlayer} />
           ) : (
@@ -285,7 +285,7 @@ const App: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-200">
+    <div className="min-h-screen bg-background font-sans text-text-primary">
       {isDesktop ? (
           <div className="flex flex-row h-screen">
               {PlayerPanel}
@@ -300,7 +300,7 @@ const App: React.FC = () => {
       {/* Toast Notification */}
       {showUpdateToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-fade-in-out">
-          <div className="bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg shadow-lg">
+          <div className="bg-accent text-background font-semibold px-4 py-2 rounded-lg shadow-lg">
             Jadwal telah diperbarui.
           </div>
         </div>

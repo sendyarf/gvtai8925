@@ -49,21 +49,21 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetTime, size
       <div className="grid grid-flow-col gap-x-4 sm:gap-x-6 text-center auto-cols-max font-mono">
         {days > 0 && (
           <div className="flex flex-col">
-            <span className="countdown font-bold text-4xl sm:text-6xl text-slate-100">{String(days).padStart(2, '0')}</span>
-            <span className="text-xs sm:text-sm text-slate-500 uppercase">days</span>
+            <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{String(days).padStart(2, '0')}</span>
+            <span className="text-xs sm:text-sm text-text-secondary uppercase">days</span>
           </div>
         )}
         <div className="flex flex-col">
-          <span className="countdown font-bold text-4xl sm:text-6xl text-slate-100">{formattedHours}</span>
-          <span className="text-xs sm:text-sm text-slate-500 uppercase">hours</span>
+          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{formattedHours}</span>
+          <span className="text-xs sm:text-sm text-text-secondary uppercase">hours</span>
         </div>
         <div className="flex flex-col">
-          <span className="countdown font-bold text-4xl sm:text-6xl text-slate-100">{formattedMinutes}</span>
-          <span className="text-xs sm:text-sm text-slate-500 uppercase">min</span>
+          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{formattedMinutes}</span>
+          <span className="text-xs sm:text-sm text-text-secondary uppercase">min</span>
         </div>
         <div className="flex flex-col">
-          <span className="countdown font-bold text-4xl sm:text-6xl text-slate-100">{formattedSeconds}</span>
-          <span className="text-xs sm:text-sm text-slate-500 uppercase">sec</span>
+          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{formattedSeconds}</span>
+          <span className="text-xs sm:text-sm text-text-secondary uppercase">sec</span>
         </div>
       </div>
     );
@@ -77,7 +77,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetTime, size
   parts.push(`${formattedSeconds}s`);
 
   return (
-    <div className="font-mono text-base font-medium text-slate-300 tabular-nums">
+    <div className="font-mono text-base font-medium text-text-primary tabular-nums">
       {parts.join(' : ')}
     </div>
   );

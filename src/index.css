@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  background-color: #020617; /* slate-950 */
+  background-color: #121212; /* background */
 }
 
 /* For custom scrollbar styling */
@@ -16,12 +16,12 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #1e293b; /* slate-800 */
+  background: #1E1E1E; /* surface */
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155; /* slate-700 */
+  background: #4F4F4F;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569; /* slate-600 */
+  background: #6D6D6D;
 }

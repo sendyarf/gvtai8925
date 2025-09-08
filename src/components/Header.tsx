@@ -34,11 +34,11 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
   return (
-    <header className="p-4 border-b border-slate-800/50 sticky top-0 bg-slate-950/80 backdrop-blur-md z-10">
+    <header className="p-4 border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <GovoetLogo className="w-8 h-8 text-amber-400" />
-          <h1 className="text-3xl font-bold text-slate-100">
+          <GovoetLogo className="w-8 h-8 text-accent" />
+          <h1 className="text-3xl font-bold text-text-primary">
             GOVOET
           </h1>
         </div>
@@ -48,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) =
                 target="_blank" 
                 rel="noopener noreferrer" 
                 title="Dukung kami di Saweria"
-                className="text-slate-400 hover:text-amber-400 transition-colors"
+                className="text-text-secondary hover:text-secondary-accent transition-colors"
                 aria-label="Dukung kami di Saweria"
             >
                 <HeartIcon className="w-6 h-6" />
@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) =
                 target="_blank" 
                 rel="noopener noreferrer" 
                 title="Gabung saluran Telegram kami"
-                className="text-slate-400 hover:text-amber-400 transition-colors"
+                className="text-text-secondary hover:text-secondary-accent transition-colors"
                 aria-label="Gabung saluran Telegram kami"
             >
                 <TelegramIcon className="w-6 h-6" />
@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) =
       </div>
       <div className="relative">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <SearchIcon className="h-5 w-5 text-slate-500" />
+            <SearchIcon className="h-5 w-5 text-text-secondary" />
         </div>
         <input
             type="search"
@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) =
             id="search"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="block w-full rounded-md border-0 bg-slate-900 py-2.5 pl-10 pr-3 text-slate-200 ring-1 ring-inset ring-slate-800 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-amber-500 sm:text-sm sm:leading-6 transition-all"
+            className="block w-full rounded-md border-0 bg-surface py-2.5 pl-10 pr-3 text-text-primary ring-1 ring-inset ring-white/10 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm sm:leading-6 transition-all"
             placeholder="Search by team or league..."
             aria-label="Search matches"
         />

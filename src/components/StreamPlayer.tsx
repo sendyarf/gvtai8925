@@ -25,10 +25,10 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
     // Case 1: No match selected at all.
     if (!match) {
         return (
-            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 rounded-lg border-2 border-dashed border-slate-800 p-4">
-                <GovoetLogo className="w-24 h-24 text-slate-700" />
-                <h2 className="mt-6 text-2xl font-bold text-slate-300">Welcome to GOVOET</h2>
-                <p className="mt-2 text-slate-500">Select a live match from the schedule to begin streaming.</p>
+            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-surface rounded-lg border-2 border-dashed border-white/10 p-4">
+                <GovoetLogo className="w-24 h-24 text-white/10" />
+                <h2 className="mt-6 text-2xl font-bold text-text-primary">Welcome to GOVOET</h2>
+                <p className="mt-2 text-text-secondary">Select a live match from the schedule to begin streaming.</p>
             </div>
         );
     }
@@ -36,10 +36,10 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
     // Case 2: A live match is selected, but no server has been chosen yet. SHOW SERVER SELECTION.
     if (!streamUrl) {
          return (
-            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 lg:rounded-lg p-4 sm:p-8 relative">
+            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-background lg:bg-surface lg:rounded-lg p-4 sm:p-8 relative">
                 <button
                     onClick={onClose}
-                    className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-slate-300 hover:text-amber-500 transition-colors"
+                    className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-text-secondary hover:text-secondary-accent transition-colors"
                 >
                     <BackIcon className="w-5 h-5" />
                     Schedule
@@ -47,24 +47,24 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
                 
                 <div className="flex items-center justify-center gap-4 sm:gap-8 my-8 w-full max-w-lg">
                      <div className="flex flex-col sm:flex-row items-center gap-3 flex-1 justify-end">
-                        <span className="font-bold text-lg sm:text-2xl text-slate-100 text-right order-2 sm:order-1">{match.team1.name}</span>
+                        <span className="font-bold text-lg sm:text-2xl text-text-primary text-right order-2 sm:order-1">{match.team1.name}</span>
                         <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 sm:w-16 sm:h-16 object-contain order-1 sm:order-2"/>
                     </div>
-                    <span className="text-xl sm:text-2xl font-bold text-slate-500">VS</span>
+                    <span className="text-xl sm:text-2xl font-bold text-text-secondary">VS</span>
                     <div className="flex flex-col sm:flex-row items-center gap-3 flex-1">
                         <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 sm:w-16 sm:h-16 object-contain"/>
-                        <span className="font-bold text-lg sm:text-2xl text-slate-100 text-left">{match.team2.name}</span>
+                        <span className="font-bold text-lg sm:text-2xl text-text-primary text-left">{match.team2.name}</span>
                     </div>
                 </div>
 
-                <span className="text-base sm:text-lg text-slate-400 mb-4">Select a Server to Start</span>
+                <span className="text-base sm:text-lg text-text-secondary mb-4">Select a Server to Start</span>
                 
                 <div className="w-full max-w-md grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {match.servers.map((server, index) => (
                         <button
                             key={index}
                             onClick={() => onWatchStream(server.url)}
-                            className="block text-center py-2.5 px-2 text-sm bg-slate-800 rounded-md text-slate-200 hover:bg-amber-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all duration-200 font-semibold"
+                            className="block text-center py-2.5 px-2 text-sm bg-surface rounded-md text-text-primary hover:bg-secondary-accent hover:text-background focus:outline-none focus:ring-2 focus:ring-accent transition-all duration-200 font-semibold ring-1 ring-inset ring-white/10"
                         >
                             {server.label || `Server ${index + 1}`}
                         </button>
@@ -76,12 +76,12 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
 
     // Case 3: Stream is active. SHOW PLAYER + SERVER SWITCHER.
     return (
-        <div className="w-full h-full flex flex-col bg-black lg:rounded-lg overflow-hidden shadow-2xl shadow-black/50 lg:border lg:border-slate-800">
+        <div className="w-full h-full flex flex-col bg-black lg:rounded-lg overflow-hidden shadow-2xl shadow-black/50 lg:border lg:border-white/10">
              {/* Header for mobile back button */}
-             <div className="p-4 bg-slate-900 lg:border-b lg:border-slate-800 flex items-center justify-between lg:hidden">
+             <div className="p-4 bg-surface lg:border-b lg:border-white/10 flex items-center justify-between lg:hidden">
                 <button
                     onClick={onClose}
-                    className="flex items-center gap-1 text-sm text-slate-300 hover:text-amber-500 transition-colors"
+                    className="flex items-center gap-1 text-sm text-text-secondary hover:text-secondary-accent transition-colors"
                 >
                     <BackIcon className="w-5 h-5" />
                     Schedule
@@ -103,8 +103,8 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
             </div>
 
             {/* Server Switcher Footer */}
-            <div className="bg-slate-900 p-3 lg:border-t lg:border-slate-800">
-                <p className="text-xs text-slate-400 mb-2 font-semibold uppercase tracking-wider text-center lg:text-left">Switch Server</p>
+            <div className="bg-surface p-3 lg:border-t lg:border-white/10">
+                <p className="text-xs text-text-secondary mb-2 font-semibold uppercase tracking-wider text-center lg:text-left">Switch Server</p>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
                     {match.servers.map((server, index) => {
                         const isActive = server.url === streamUrl;
@@ -114,8 +114,8 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
                                 onClick={() => onWatchStream(server.url)}
                                 className={`block text-center py-2 px-1 text-xs sm:text-sm rounded-md transition-all duration-200 font-medium truncate ${
                                     isActive 
-                                    ? 'bg-amber-500 text-slate-900 cursor-default' 
-                                    : 'bg-slate-700 text-slate-200 hover:bg-amber-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500'
+                                    ? 'bg-accent text-background cursor-default' 
+                                    : 'bg-white/5 text-text-primary hover:bg-secondary-accent hover:text-background focus:outline-none focus:ring-2 focus:ring-accent'
                                 }`}
                                 disabled={isActive}
                             >
