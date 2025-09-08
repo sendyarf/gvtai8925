@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import type { Match, MatchStatus } from '../types';
-import { CountdownTimer } from './CountdownTimer';
 
 interface MatchCardProps {
   match: Match;
@@ -26,7 +25,7 @@ const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, displayTime, isSelected, isActiveStream, onSelect, onWatch }) => {
+export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime, isSelected, isActiveStream, onSelect, onWatch }) => {
   const [showServers, setShowServers] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const isLive = status === 'live';
@@ -122,9 +121,8 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, 
                     <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${showServers ? 'rotate-180' : ''}`} />
                 </button>
             ) : (
-                <div className="flex flex-col items-center gap-1 text-center">
-                    <span className="text-xs text-slate-400">STARTS IN</span>
-                    <CountdownTimer targetTime={startTime} />
+                <div className="text-center py-2 bg-slate-800 text-slate-300 rounded-md text-sm font-bold uppercase tracking-wider">
+                    Upcoming
                 </div>
             )}
         </div>

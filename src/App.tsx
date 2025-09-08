@@ -4,6 +4,7 @@ import { MatchCard } from './components/StoryForm';
 import { LoadingSpinner } from './components/LoadingDisplay';
 import { ErrorMessage } from './components/ErrorMessage';
 import { StreamPlayer } from './components/StreamPlayer';
+import { UpcomingMatchDisplay } from './components/UpcomingMatchDisplay';
 import type { Match, MatchWithState, MatchStatus } from './types';
 
 const SCHEDULE_URL = 'https://weekendsch.pages.dev/sch/schedulegvt.json';
@@ -137,11 +138,15 @@ const App: React.FC = () => {
 
   const handleSelectMatch = useCallback((match: MatchWithState) => {
       setSelectedMatch(match);
-      if(match.status !== 'live') {
+      
+      // Reset stream URL if the match is not live
+      if (match.status !== 'live') {
           setActiveStreamUrl(null);
-          if (!isDesktop) {
-            setMobileView('schedule');
-          }
+      }
+
+      // On mobile, switch to the player/details view whenever a match is selected
+      if (!isDesktop) {
+        setMobileView('player');
       }
   }, [isDesktop]);
 
@@ -244,7 +249,11 @@ const App: React.FC = () => {
 
   const PlayerPanel = (
        <main className="w-full flex-1 flex items-center justify-center p-0 lg:p-4 bg-slate-950 h-screen">
-          <StreamPlayer match={selectedMatch} streamUrl={activeStreamUrl} onClose={handleClosePlayer} />
+          {selectedMatch?.status === 'upcoming' ? (
+            <UpcomingMatchDisplay match={selectedMatch} onClose={handleClosePlayer} />
+          ) : (
+            <StreamPlayer match={selectedMatch} streamUrl={activeStreamUrl} onClose={handleClosePlayer} />
+          )}
         </main>
   );
 
