@@ -26,19 +26,19 @@ export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ matc
             </button>
             <span className="text-sm sm:text-base font-semibold text-accent uppercase tracking-wider">{match.league}</span>
 
-            <div className="flex items-center justify-center gap-4 sm:gap-8 my-8 w-full max-w-lg">
-                <div className="flex flex-col sm:flex-row items-center gap-3 flex-1 justify-end">
-                    <span className="font-bold text-lg sm:text-2xl text-text-primary text-right order-2 sm:order-1">{match.team1.name}</span>
-                    <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 sm:w-16 sm:h-16 object-contain order-1 sm:order-2"/>
+            <div className="flex items-center justify-center gap-4 sm:gap-8 my-10 w-full max-w-3xl">
+                <div className="flex flex-col sm:flex-row items-center gap-4 flex-1 justify-end">
+                    <span className="font-extrabold text-3xl sm:text-5xl text-text-primary text-right order-2 sm:order-1 leading-tight">{match.team1.name}</span>
+                    <img src={match.team1.logo} alt={match.team1.name} className="w-16 h-16 sm:w-20 sm:h-20 object-contain order-1 sm:order-2"/>
                 </div>
-                <span className="text-xl sm:text-2xl font-bold text-text-secondary">VS</span>
-                <div className="flex flex-col sm:flex-row items-center gap-3 flex-1">
-                    <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 sm:w-16 sm:h-16 object-contain"/>
-                    <span className="font-bold text-lg sm:text-2xl text-text-primary text-left">{match.team2.name}</span>
+                <span className="text-2xl sm:text-4xl font-light text-text-secondary/50 mx-2">VS</span>
+                <div className="flex flex-col sm:flex-row items-center gap-4 flex-1">
+                    <img src={match.team2.logo} alt={match.team2.name} className="w-16 h-16 sm:w-20 sm:h-20 object-contain"/>
+                    <span className="font-extrabold text-3xl sm:text-5xl text-text-primary text-left leading-tight">{match.team2.name}</span>
                 </div>
             </div>
 
-            <span className="text-base sm:text-lg text-text-secondary mb-4">STARTS IN</span>
+            <span className="text-sm text-text-secondary mb-6 uppercase tracking-widest">STARTS IN</span>
             <CountdownTimer targetTime={match.startTime} size="large" />
         </div>
     );
