@@ -169,10 +169,7 @@ const App: React.FC = () => {
 
   const handleSelectMatch = useCallback((match: MatchWithState) => {
       setSelectedMatch(match);
-      
-      if (match.status !== 'live') {
-          setActiveStreamUrl(null);
-      }
+      setActiveStreamUrl(null); // ALWAYS clear stream URL on new selection
 
       if (!isDesktop) {
         setMobileView('player');
@@ -274,7 +271,12 @@ const App: React.FC = () => {
           {selectedMatch?.status === 'upcoming' ? (
             <UpcomingMatchDisplay match={selectedMatch} onClose={handleClosePlayer} />
           ) : (
-            <StreamPlayer match={selectedMatch} streamUrl={activeStreamUrl} onClose={handleClosePlayer} />
+            <StreamPlayer 
+                match={selectedMatch} 
+                streamUrl={activeStreamUrl} 
+                onClose={handleClosePlayer} 
+                onWatchStream={handleWatchStream}
+            />
           )}
         </main>
   );

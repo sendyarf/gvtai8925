@@ -5,6 +5,7 @@ interface StreamPlayerProps {
     match: MatchWithState | null;
     streamUrl: string | null;
     onClose: () => void;
+    onWatchStream: (url: string) => void;
 }
 
 const GovoetLogo: React.FC<{ className?: string }> = ({ className }) => (
@@ -20,7 +21,7 @@ const BackIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 
-export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, onClose }) => {
+export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, onClose, onWatchStream }) => {
     // Case 1: No match selected at all.
     if (!match) {
         return (
@@ -32,63 +33,97 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
         );
     }
     
-    // Case 2: A live match is selected, but no server has been chosen yet.
+    // Case 2: A live match is selected, but no server has been chosen yet. SHOW SERVER SELECTION.
     if (!streamUrl) {
          return (
-            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 rounded-lg border-2 border-dashed border-slate-800 p-4">
-                <GovoetLogo className="w-24 h-24 text-slate-700" />
-                <h2 className="mt-6 text-2xl font-bold text-slate-300">{match.team1.name} vs {match.team2.name}</h2>
-                <p className="mt-2 text-slate-500">The match is live! Select a server from the list to begin streaming.</p>
-                 <button 
+            <div className="w-full h-full flex flex-col items-center justify-center text-center bg-slate-900 lg:rounded-lg p-4 sm:p-8 relative">
+                <button
                     onClick={onClose}
-                    className="lg:hidden flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors mt-8"
-                >
-                    <BackIcon className="w-5 h-5" />
-                    Back to Schedule
-                </button>
-            </div>
-        );
-    }
-
-    // Case 3: Stream is active
-    return (
-        <div className="w-full h-full flex flex-col bg-black lg:rounded-lg overflow-hidden shadow-2xl shadow-black/50 lg:border lg:border-slate-800">
-            <div className="p-4 bg-slate-900 lg:border-b lg:border-slate-800 flex items-center justify-between">
-                <button 
-                    onClick={onClose}
-                    className="lg:hidden flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors"
+                    className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors"
                 >
                     <BackIcon className="w-5 h-5" />
                     Schedule
                 </button>
-                <div className="text-center text-xs text-blue-500 font-semibold hidden lg:block">
-                    {match.league}
+                
+                <div className="flex items-center justify-center gap-4 sm:gap-8 my-8 w-full max-w-lg">
+                     <div className="flex flex-col sm:flex-row items-center gap-3 flex-1 justify-end">
+                        <span className="font-bold text-lg sm:text-2xl text-slate-100 text-right order-2 sm:order-1">{match.team1.name}</span>
+                        <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 sm:w-16 sm:h-16 object-contain order-1 sm:order-2"/>
+                    </div>
+                    <span className="text-xl sm:text-2xl font-bold text-slate-500">VS</span>
+                    <div className="flex flex-col sm:flex-row items-center gap-3 flex-1">
+                        <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 sm:w-16 sm:h-16 object-contain"/>
+                        <span className="font-bold text-lg sm:text-2xl text-slate-100 text-left">{match.team2.name}</span>
+                    </div>
                 </div>
+
+                <span className="text-base sm:text-lg text-slate-400 mb-4">Select a Server to Start</span>
+                
+                <div className="w-full max-w-md grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {match.servers.map((server, index) => (
+                        <button
+                            key={index}
+                            onClick={() => onWatchStream(server.url)}
+                            className="block text-center py-2.5 px-2 text-sm bg-slate-800 rounded-md text-slate-200 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-semibold"
+                        >
+                            {server.label || `Server ${index + 1}`}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // Case 3: Stream is active. SHOW PLAYER + SERVER SWITCHER.
+    return (
+        <div className="w-full h-full flex flex-col bg-black lg:rounded-lg overflow-hidden shadow-2xl shadow-black/50 lg:border lg:border-slate-800">
+             {/* Header for mobile back button */}
+             <div className="p-4 bg-slate-900 lg:border-b lg:border-slate-800 flex items-center justify-between lg:hidden">
+                <button
+                    onClick={onClose}
+                    className="flex items-center gap-1 text-sm text-slate-300 hover:text-blue-500 transition-colors"
+                >
+                    <BackIcon className="w-5 h-5" />
+                    Schedule
+                </button>
                  {/* Placeholder to balance the flex layout on mobile */}
-                <div className="lg:hidden w-24"></div>
+                <div className="w-24"></div>
             </div>
-            
-            <div className="hidden lg:flex p-4 bg-slate-900 border-b border-slate-800 items-center justify-center">
-                 <div className="flex items-center justify-between gap-4 w-full max-w-md">
-                     <div className="flex items-center gap-3">
-                        <img src={match.team1.logo} alt={match.team1.name} className="w-7 h-7 object-contain"/>
-                        <span className="font-semibold text-lg text-slate-100">{match.team1.name}</span>
-                    </div>
-                     <span className="text-sm font-bold text-slate-500">VS</span>
-                     <div className="flex items-center gap-3">
-                        <span className="font-semibold text-lg text-slate-100">{match.team2.name}</span>
-                        <img src={match.team2.logo} alt={match.team2.name} className="w-7 h-7 object-contain"/>
-                    </div>
-                </div>
-            </div>
-            <div className="flex-grow bg-black">
+
+            {/* Player */}
+            <div className="flex-grow bg-black aspect-video lg:aspect-auto">
                 <iframe
+                    key={streamUrl} // Add key to force re-render on URL change
                     src={streamUrl}
                     title="Live Stream Player"
                     className="w-full h-full border-0"
                     allow="encrypted-media; autoplay; fullscreen"
                     allowFullScreen
                 ></iframe>
+            </div>
+
+            {/* Server Switcher Footer */}
+            <div className="bg-slate-900 p-3 lg:border-t lg:border-slate-800">
+                <p className="text-xs text-slate-400 mb-2 font-semibold uppercase tracking-wider text-center lg:text-left">Switch Server</p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+                    {match.servers.map((server, index) => {
+                        const isActive = server.url === streamUrl;
+                        return (
+                             <button
+                                key={index}
+                                onClick={() => onWatchStream(server.url)}
+                                className={`block text-center py-2 px-1 text-xs sm:text-sm rounded-md transition-all duration-200 font-medium truncate ${
+                                    isActive 
+                                    ? 'bg-blue-600 text-white cursor-default' 
+                                    : 'bg-slate-700 text-slate-200 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                }`}
+                                disabled={isActive}
+                            >
+                                {server.label || `Server ${index + 1}`}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );
