@@ -16,30 +16,38 @@ interface UpcomingMatchDisplayProps {
 
 export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ match, onClose }) => {
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center text-center bg-surface lg:rounded-lg lg:border-2 lg:border-dashed lg:border-white/10 p-4 sm:p-8 relative">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-surface lg:rounded-lg lg:border-2 lg:border-dashed lg:border-white/10 p-4 sm:p-8 relative">
             <button 
                 onClick={onClose}
-                className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-text-secondary hover:text-secondary-accent transition-colors"
+                className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-text-secondary hover:text-secondary-accent transition-colors z-10"
             >
                 <BackIcon className="w-5 h-5" />
                 Schedule
             </button>
-            <span className="text-sm sm:text-base font-semibold text-accent uppercase tracking-wider">{match.league}</span>
+            
+            <div className="flex flex-col lg:flex-row items-center justify-center w-full h-full gap-8 lg:gap-16">
+                
+                {/* Left Column: Time Info */}
+                <div className="flex flex-col items-center lg:items-start text-center lg:text-left pt-12 lg:pt-0">
+                    <span className="text-sm text-text-secondary mb-2 uppercase tracking-widest">STARTS IN</span>
+                    <CountdownTimer targetTime={match.startTime} size="hero" />
 
-            <div className="flex items-center justify-center gap-4 sm:gap-8 my-10 w-full max-w-3xl">
-                <div className="flex flex-col sm:flex-row items-center gap-4 flex-1 justify-end">
-                    <span className="font-extrabold text-3xl sm:text-5xl text-text-primary text-right order-2 sm:order-1 leading-tight">{match.team1.name}</span>
-                    <img src={match.team1.logo} alt={match.team1.name} className="w-16 h-16 sm:w-20 sm:h-20 object-contain order-1 sm:order-2"/>
+                    <div className="mt-8 lg:mt-12">
+                        <h2 className="text-7xl lg:text-8xl font-extrabold leading-none text-text-primary">MATCH</h2>
+                        <h2 className="text-7xl lg:text-8xl font-extrabold leading-none text-text-primary">DAY</h2>
+                        <div className="w-48 h-1.5 bg-accent mt-4"></div>
+                    </div>
                 </div>
-                <span className="text-2xl sm:text-4xl font-light text-text-secondary/50 mx-2">VS</span>
-                <div className="flex flex-col sm:flex-row items-center gap-4 flex-1">
-                    <img src={match.team2.logo} alt={match.team2.name} className="w-16 h-16 sm:w-20 sm:h-20 object-contain"/>
-                    <span className="font-extrabold text-3xl sm:text-5xl text-text-primary text-left leading-tight">{match.team2.name}</span>
+
+                {/* Right Column: Match Info */}
+                <div className="flex flex-col items-center justify-center text-center">
+                    <span className="text-base font-semibold text-accent uppercase tracking-wider mb-6">{match.league}</span>
+                    <div className="flex items-center justify-center gap-8 sm:gap-16">
+                        <img src={match.team1.logo} alt={match.team1.name} className="w-32 h-32 sm:w-40 sm:h-40 object-contain"/>
+                        <img src={match.team2.logo} alt={match.team2.name} className="w-32 h-32 sm:w-40 sm:h-40 object-contain"/>
+                    </div>
                 </div>
             </div>
-
-            <span className="text-sm text-text-secondary mb-6 uppercase tracking-widest">STARTS IN</span>
-            <CountdownTimer targetTime={match.startTime} size="large" />
         </div>
     );
 };

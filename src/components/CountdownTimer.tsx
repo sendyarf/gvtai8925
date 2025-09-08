@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 interface CountdownTimerProps {
   targetTime: number; // UTC timestamp
-  size?: 'small' | 'large';
+  size?: 'small' | 'large' | 'hero';
 }
 
 const calculateTimeLeft = (targetTime: number) => {
@@ -40,9 +40,22 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetTime, size
 
   const { days, hours, minutes, seconds } = timeLeft;
   
-  const formattedHours = String(hours).padStart(2, '0');
+  const totalHours = days * 24 + hours;
+  const formattedHours = String(totalHours).padStart(2, '0');
   const formattedMinutes = String(minutes).padStart(2, '0');
   const formattedSeconds = String(seconds).padStart(2, '0');
+
+  if (size === 'hero') {
+    return (
+      <div className="font-mono text-7xl sm:text-8xl font-bold text-text-primary tracking-tighter">
+        <span>{formattedHours}</span>
+        <span className="animate-pulse">:</span>
+        <span>{formattedMinutes}</span>
+        <span className="animate-pulse">:</span>
+        <span>{formattedSeconds}</span>
+      </div>
+    );
+  }
 
   if (size === 'large') {
     return (
@@ -54,15 +67,15 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetTime, size
           </div>
         )}
         <div className="flex flex-col">
-          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{formattedHours}</span>
+          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{String(hours).padStart(2, '0')}</span>
           <span className="text-xs sm:text-sm text-text-secondary uppercase">hours</span>
         </div>
         <div className="flex flex-col">
-          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{formattedMinutes}</span>
+          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{String(minutes).padStart(2, '0')}</span>
           <span className="text-xs sm:text-sm text-text-secondary uppercase">min</span>
         </div>
         <div className="flex flex-col">
-          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{formattedSeconds}</span>
+          <span className="countdown font-bold text-4xl sm:text-6xl text-text-primary">{String(seconds).padStart(2, '0')}</span>
           <span className="text-xs sm:text-sm text-text-secondary uppercase">sec</span>
         </div>
       </div>
@@ -72,7 +85,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetTime, size
   // Default 'small' size
   const parts = [];
   if (days > 0) parts.push(`${days}d`);
-  parts.push(`${formattedHours}h`);
+  parts.push(`${String(hours).padStart(2, '0')}h`);
   parts.push(`${formattedMinutes}m`);
   parts.push(`${formattedSeconds}s`);
 
