@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import type { MatchWithState } from '../types';
+import type { Match } from '../types';
+import { CountdownTimer } from './CountdownTimer';
+
+export type MatchStatus = 'upcoming' | 'live';
 
 interface MatchCardProps {
-  match: MatchWithState;
+  match: Match;
+  status: MatchStatus;
+  startTime: number;
   isSelected: boolean;
   isActiveStream: boolean;
   onSelect: () => void;
@@ -22,10 +27,10 @@ const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match, isSelected, isActiveStream, onSelect, onWatch }) => {
+export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, isSelected, isActiveStream, onSelect, onWatch }) => {
   const [showServers, setShowServers] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const isLive = match.status === 'live';
+  const isLive = status === 'live';
 
   // Collapse or expand server list based on selection and active stream state
   useEffect(() => {
@@ -74,7 +79,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, isSelected, isActiv
             <div className="flex justify-between items-center text-xs text-slate-400 mb-3">
                 <span className="truncate pr-2">{match.league}</span>
                 <div className="flex items-center gap-3 flex-shrink-0">
-                  <span className="font-mono">{match.kickoff_time}</span>
+                  <span className="font-mono">{new Date(startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   <div className="relative">
                     <button 
                       onClick={handleCopyLink} 
@@ -106,7 +111,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, isSelected, isActiv
             </div>
         </div>
       
-        <div className={`px-4 pb-4 transition-all duration-300 pt-2`}>
+        <div className={`px-4 pb-4 transition-all duration-300 ${isLive ? 'pt-2' : 'pt-4'}`}>
             {isLive ? (
                 <button
                     onClick={handleWatchClick}
@@ -118,8 +123,9 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, isSelected, isActiv
                     <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${showServers ? 'rotate-180' : ''}`} />
                 </button>
             ) : (
-                <div className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold bg-slate-800 text-slate-400 rounded-md">
-                    UPCOMING
+                <div className="flex flex-col items-center gap-1 text-center">
+                    <span className="text-xs text-slate-400">STARTS IN</span>
+                    <CountdownTimer targetTime={startTime} />
                 </div>
             )}
         </div>

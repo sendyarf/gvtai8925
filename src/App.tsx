@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Header } from './components/Header';
-import { MatchCard } from './components/StoryForm';
+import { MatchCard, MatchStatus } from './components/StoryForm';
 import { LoadingSpinner } from './components/LoadingDisplay';
 import { ErrorMessage } from './components/ErrorMessage';
 import { StreamPlayer } from './components/StreamPlayer';
-import { UpcomingMatchDisplay } from './components/UpcomingMatchDisplay';
-import type { Match, MatchWithState, MatchStatus } from './types';
+import type { Match } from './types';
+
+interface MatchWithState extends Match {
+  status: MatchStatus;
+  startTime: number;
+}
 
 const SCHEDULE_URL = 'https://weekendsch.pages.dev/sch/schedulegvt.json';
 
@@ -23,13 +27,20 @@ const useMediaQuery = (query: string) => {
   return matches;
 };
 
+const getLocalDateKey = (timestamp: number) => {
+    const d = new Date(timestamp);
+    // Format to YYYY-MM-DD to ensure correct sorting and uniqueness
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
 const groupMatchesByDate = (matches: MatchWithState[]): Record<string, MatchWithState[]> => {
   return matches.reduce((acc, match) => {
-    const date = match.kickoff_date;
-    if (!acc[date]) {
-      acc[date] = [];
+    // Group by local date derived from the UTC timestamp
+    const dateKey = getLocalDateKey(match.startTime);
+    if (!acc[dateKey]) {
+      acc[dateKey] = [];
     }
-    acc[date].push(match);
+    acc[dateKey].push(match);
     return acc;
   }, {} as Record<string, MatchWithState[]>);
 };
@@ -40,8 +51,10 @@ const formatDate = (dateString: string) => {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const matchDate = new Date(dateString);
-    matchDate.setHours(0,0,0,0);
+    // dateString is now a local 'YYYY-MM-DD' key. Parse it as a local date.
+    // Splitting is safer than new Date(dateString) to avoid timezone interpretation issues.
+    const [year, month, day] = dateString.split('-').map(Number);
+    const matchDate = new Date(year, month - 1, day);
     
     if (matchDate.getTime() === today.getTime()) return 'Today';
     if (matchDate.getTime() === tomorrow.getTime()) return 'Tomorrow';
@@ -102,7 +115,8 @@ const App: React.FC = () => {
       const updatedAndFiltered = allMatches
         .map(match => {
           try {
-            const startTime = new Date(`${match.match_date}T${match.match_time}`).getTime();
+            // Interpret the time from JSON as being in UTC+7 (Jakarta time)
+            const startTime = new Date(`${match.match_date}T${match.match_time}:00+07:00`).getTime();
             const durationInMs = parseFloat(match.duration) * 60 * 60 * 1000;
             const endTime = startTime + durationInMs;
 
@@ -129,9 +143,8 @@ const App: React.FC = () => {
       setSelectedMatch(match);
       if(match.status !== 'live') {
           setActiveStreamUrl(null);
-           if (!isDesktop) {
-            // For upcoming matches on mobile, switch to player view to see countdown
-            setMobileView('player');
+          if (!isDesktop) {
+            setMobileView('schedule');
           }
       }
   }, [isDesktop]);
@@ -217,6 +230,8 @@ const App: React.FC = () => {
                   <MatchCard 
                       key={match.id} 
                       match={match}
+                      status={match.status}
+                      startTime={match.startTime}
                       isSelected={selectedMatch?.id === match.id}
                       isActiveStream={selectedMatch?.id === match.id && activeStreamUrl !== null}
                       onSelect={() => handleSelectMatch(match)}
@@ -232,11 +247,7 @@ const App: React.FC = () => {
 
   const PlayerPanel = (
        <main className="w-full flex-1 flex items-center justify-center p-0 lg:p-4 bg-slate-950 h-screen">
-          {selectedMatch?.status === 'upcoming' ? (
-              <UpcomingMatchDisplay match={selectedMatch} onClose={handleClosePlayer} />
-          ) : (
-              <StreamPlayer match={selectedMatch} streamUrl={activeStreamUrl} onClose={handleClosePlayer} />
-          )}
+          <StreamPlayer match={selectedMatch} streamUrl={activeStreamUrl} onClose={handleClosePlayer} />
         </main>
   );
 
