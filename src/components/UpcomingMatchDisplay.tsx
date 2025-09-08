@@ -25,14 +25,16 @@ export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ matc
                 Schedule
             </button>
             
-            <div className="flex flex-col lg:flex-row items-center justify-center w-full h-full gap-8 lg:gap-16">
+            <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-y-8 lg:gap-x-16">
                 
                 {/* Left Column: Time Info */}
-                <div className="flex flex-col items-center lg:items-start text-center lg:text-left pt-12 lg:pt-0">
-                    <span className="text-xl font-medium text-text-primary mb-1">STARTS IN</span>
-                    <CountdownTimer targetTime={match.startTime} size="matchday" />
+                <div className="flex flex-col items-center text-center lg:items-start lg:text-left pt-12 lg:pt-0">
+                    <span className="text-xl font-medium text-text-primary">STARTS IN</span>
+                    <div className="my-2">
+                      <CountdownTimer targetTime={match.startTime} size="matchday" />
+                    </div>
 
-                    <div className="mt-8 lg:mt-12">
+                    <div className="mt-4">
                         <h2 className="text-5xl font-extrabold leading-none text-text-primary">MATCH</h2>
                         <h2 className="text-5xl font-extrabold leading-none text-text-primary">DAY</h2>
                         <div className="w-full h-1.5 bg-accent mt-4"></div>
@@ -40,11 +42,11 @@ export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ matc
                 </div>
 
                 {/* Right Column: Match Info */}
-                <div className="flex flex-col items-center justify-center text-center">
-                    <span className="text-xl font-medium text-text-primary mb-6">{match.league}</span>
-                    <div className="flex items-center justify-center gap-8">
-                        <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain"/>
-                        <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain"/>
+                <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+                    <span className="text-xl font-medium text-text-primary">{match.league}</span>
+                    <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
+                        <img src={match.team1.logo} alt={match.team1.name} className="w-50 h-50 object-contain"/>
+                        <img src={match.team2.logo} alt={match.team2.name} className="w-50 h-50 object-contain"/>
                     </div>
                 </div>
             </div>
