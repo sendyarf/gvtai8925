@@ -146,7 +146,12 @@ const App: React.FC = () => {
         })
         .filter((m): m is MatchWithState => m !== null);
       
-      updatedAndFiltered.sort((a, b) => a.startTime - b.startTime);
+      // Sort matches: live first, then by start time.
+      updatedAndFiltered.sort((a, b) => {
+        if (a.status === 'live' && b.status === 'upcoming') return -1;
+        if (a.status === 'upcoming' && b.status === 'live') return 1;
+        return a.startTime - b.startTime;
+      });
 
       setVisibleMatches(updatedAndFiltered);
 
