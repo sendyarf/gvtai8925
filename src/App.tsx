@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Header } from './components/Header';
-import { MatchCard, MatchStatus } from './components/StoryForm';
+import { MatchCard } from './components/StoryForm';
 import { LoadingSpinner } from './components/LoadingDisplay';
 import { ErrorMessage } from './components/ErrorMessage';
 import { StreamPlayer } from './components/StreamPlayer';
-import type { Match } from './types';
-
-interface MatchWithState extends Match {
-  status: MatchStatus;
-  startTime: number;
-}
+import type { Match, MatchWithState, MatchStatus } from './types';
 
 const SCHEDULE_URL = 'https://weekendsch.pages.dev/sch/schedulegvt.json';
 
@@ -117,13 +112,14 @@ const App: React.FC = () => {
           try {
             // Interpret the time from JSON as being in UTC+7 (Jakarta time)
             const startTime = new Date(`${match.match_date}T${match.match_time}:00+07:00`).getTime();
+            const displayTime = new Date(`${match.kickoff_date}T${match.kickoff_time}:00+07:00`).getTime();
             const durationInMs = parseFloat(match.duration) * 60 * 60 * 1000;
             const endTime = startTime + durationInMs;
 
             if (now >= endTime) return null;
 
             const status: MatchStatus = now >= startTime ? 'live' : 'upcoming';
-            return { ...match, status, startTime };
+            return { ...match, status, startTime, displayTime };
           } catch (e) {
             console.error(`Error processing match ${match.id}:`, e);
             return null;
@@ -232,6 +228,7 @@ const App: React.FC = () => {
                       match={match}
                       status={match.status}
                       startTime={match.startTime}
+                      displayTime={match.displayTime}
                       isSelected={selectedMatch?.id === match.id}
                       isActiveStream={selectedMatch?.id === match.id && activeStreamUrl !== null}
                       onSelect={() => handleSelectMatch(match)}

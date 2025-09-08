@@ -26,4 +26,5 @@ export type MatchStatus = 'upcoming' | 'live';
 export interface MatchWithState extends Match {
   status: MatchStatus;
   startTime: number;
+  displayTime: number;
 }

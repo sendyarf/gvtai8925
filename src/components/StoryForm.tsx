@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import type { Match } from '../types';
+import type { Match, MatchStatus } from '../types';
 import { CountdownTimer } from './CountdownTimer';
-
-export type MatchStatus = 'upcoming' | 'live';
 
 interface MatchCardProps {
   match: Match;
   status: MatchStatus;
   startTime: number;
+  displayTime: number;
   isSelected: boolean;
   isActiveStream: boolean;
   onSelect: () => void;
@@ -27,7 +26,7 @@ const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, isSelected, isActiveStream, onSelect, onWatch }) => {
+export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, displayTime, isSelected, isActiveStream, onSelect, onWatch }) => {
   const [showServers, setShowServers] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const isLive = status === 'live';
@@ -79,7 +78,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, startTime, 
             <div className="flex justify-between items-center text-xs text-slate-400 mb-3">
                 <span className="truncate pr-2">{match.league}</span>
                 <div className="flex items-center gap-3 flex-shrink-0">
-                  <span className="font-mono">{new Date(startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  <span className="font-mono">{new Date(displayTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   <div className="relative">
                     <button 
                       onClick={handleCopyLink} 
