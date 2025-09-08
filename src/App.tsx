@@ -69,6 +69,7 @@ const App: React.FC = () => {
   const [mobileView, setMobileView] = useState<'schedule' | 'player'>('schedule');
   const [searchQuery, setSearchQuery] = useState('');
   const [initialMatchId, setInitialMatchId] = useState<string | null>(null);
+  const [showUpdateToast, setShowUpdateToast] = useState(false);
 
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
@@ -81,28 +82,46 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // Effect for fetching schedule: initial load + polling every 5 minutes
   useEffect(() => {
-    const fetchSchedule = async () => {
-      setIsLoading(true);
-      setError(null);
+    const fetchSchedule = async (isInitialLoad = false) => {
+      if (isInitialLoad) {
+        setIsLoading(true);
+        setError(null);
+      }
       try {
         const response = await fetch(SCHEDULE_URL);
         if (!response.ok) {
-          throw new Error(`Failed to load schedule: ${response.statusText}`);
+          if (isInitialLoad) throw new Error(`Failed to load schedule: ${response.statusText}`);
+          return; // Fail silently on auto-update
         }
         const data: Match[] = await response.json();
         setAllMatches(data);
+
+        if (!isInitialLoad) {
+          setShowUpdateToast(true);
+          setTimeout(() => setShowUpdateToast(false), 3000); // Toast visible for 3 seconds
+        }
       } catch (err) {
-        console.error("Failed to fetch schedule:", err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+        if (isInitialLoad) {
+          console.error("Failed to fetch schedule:", err);
+          setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+        } else {
+          console.error("Auto-update failed:", err);
+        }
       } finally {
-        setIsLoading(false);
+        if (isInitialLoad) setIsLoading(false);
       }
     };
 
-    fetchSchedule();
+    fetchSchedule(true); // Initial fetch
+
+    const intervalId = setInterval(() => fetchSchedule(false), 300000); // Poll every 5 minutes
+
+    return () => clearInterval(intervalId);
   }, []);
 
+  // Effect for processing matches and preserving selection
   useEffect(() => {
     const timer = setInterval(() => {
       if (allMatches.length === 0) return;
@@ -111,7 +130,6 @@ const App: React.FC = () => {
       const updatedAndFiltered = allMatches
         .map(match => {
           try {
-            // Interpret the time from JSON as being in UTC+7 (Jakarta time)
             const startTime = new Date(`${match.match_date}T${match.match_time}:00+07:00`).getTime();
             const displayTime = new Date(`${match.kickoff_date}T${match.kickoff_time}:00+07:00`).getTime();
             const durationInMs = parseFloat(match.duration) * 60 * 60 * 1000;
@@ -131,20 +149,31 @@ const App: React.FC = () => {
       updatedAndFiltered.sort((a, b) => a.startTime - b.startTime);
 
       setVisibleMatches(updatedAndFiltered);
+
+      // Preserve selected match across data refreshes
+      if (selectedMatch) {
+        const updatedSelected = updatedAndFiltered.find(m => m.id === selectedMatch.id);
+        if (updatedSelected) {
+          if (JSON.stringify(updatedSelected) !== JSON.stringify(selectedMatch)) {
+            setSelectedMatch(updatedSelected);
+          }
+        } else {
+          setSelectedMatch(null);
+          setActiveStreamUrl(null);
+        }
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [allMatches]);
+  }, [allMatches, selectedMatch]);
 
   const handleSelectMatch = useCallback((match: MatchWithState) => {
       setSelectedMatch(match);
       
-      // Reset stream URL if the match is not live
       if (match.status !== 'live') {
           setActiveStreamUrl(null);
       }
 
-      // On mobile, switch to the player/details view whenever a match is selected
       if (!isDesktop) {
         setMobileView('player');
       }
@@ -164,7 +193,6 @@ const App: React.FC = () => {
       if (matchToSelect) {
         handleSelectMatch(matchToSelect);
 
-        // Automatically start streaming if the match is live
         if (matchToSelect.status === 'live' && matchToSelect.servers.length > 0) {
           handleWatchStream(matchToSelect.servers[0].url);
         }
@@ -175,10 +203,7 @@ const App: React.FC = () => {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
         }, 100);
-        // Clear the ID so it doesn't re-trigger on subsequent renders
         setInitialMatchId(null);
-        // Also update the URL to the root, so a refresh doesn't try to find it again
-        // if the match is no longer available.
         window.history.replaceState({}, document.title, window.location.origin);
       }
     }
@@ -186,9 +211,6 @@ const App: React.FC = () => {
 
   const handleClosePlayer = useCallback(() => {
       setMobileView('schedule');
-      // optional: stop the stream when closing on mobile
-      // setActiveStreamUrl(null); 
-      // setSelectedMatch(null);
   }, []);
 
   const filteredMatches = useMemo(() => {
@@ -269,6 +291,15 @@ const App: React.FC = () => {
           <div className="h-screen">
               {mobileView === 'schedule' ? SchedulePanel : PlayerPanel}
           </div>
+      )}
+
+      {/* Toast Notification */}
+      {showUpdateToast && (
+        <div className="fixed bottom-4 right-4 z-50 animate-fade-in-out">
+          <div className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg">
+            Jadwal telah diperbarui.
+          </div>
+        </div>
       )}
     </div>
   );
