@@ -1,22 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { Match, MatchStatus } from '../types';
 
 interface MatchCardProps {
   match: Match;
   status: MatchStatus;
-  startTime: number;
   displayTime: number;
   isSelected: boolean;
-  isActiveStream: boolean;
   onSelect: () => void;
-  onWatch: (url: string) => void;
 }
-
-const ChevronDownIcon: React.FC<{ className?: string }> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
-        <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z" clipRule="evenodd" />
-    </svg>
-);
 
 const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -25,30 +16,9 @@ const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime, isSelected, isActiveStream, onSelect, onWatch }) => {
-  const [showServers, setShowServers] = useState(false);
+export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime, isSelected, onSelect }) => {
   const [isCopied, setIsCopied] = useState(false);
   const isLive = status === 'live';
-
-  // Collapse or expand server list based on selection and active stream state
-  useEffect(() => {
-    if (isSelected && isActiveStream) {
-      setShowServers(true);
-    } else if (!isSelected) {
-      setShowServers(false);
-    }
-  }, [isSelected, isActiveStream]);
-
-  const handleWatchClick = (e: React.MouseEvent) => {
-      e.stopPropagation(); // Prevent card selection when clicking the button
-      onSelect();
-      setShowServers(prev => !prev);
-  }
-
-  const handleServerClick = (e: React.MouseEvent, url: string) => {
-      e.stopPropagation();
-      onWatch(url);
-  }
 
   const handleCopyLink = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -109,39 +79,20 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, status, displayTime
             </div>
         </div>
       
-        <div className={`px-4 pb-4 transition-all duration-300 ${isLive ? 'pt-2' : 'pt-4'}`}>
+        <div className="px-4 pb-4">
             {isLive ? (
-                <button
-                    onClick={handleWatchClick}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-green-500"
-                    aria-expanded={showServers}
+                <div
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold bg-green-600 text-white rounded-md"
                 >
                     <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                     LIVE
-                    <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${showServers ? 'rotate-180' : ''}`} />
-                </button>
+                </div>
             ) : (
                 <div className="text-center py-2 bg-slate-800 text-slate-300 rounded-md text-sm font-bold uppercase tracking-wider">
                     Upcoming
                 </div>
             )}
         </div>
-
-        {showServers && isLive && isSelected && (
-            <div className="bg-slate-950/40 p-3 border-t border-slate-800">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {match.servers.map((server, index) => (
-                        <button 
-                            key={index} 
-                            onClick={(e) => handleServerClick(e, server.url)}
-                            className="block text-center py-2 px-1 text-sm bg-slate-700 rounded-md text-slate-200 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium"
-                        >
-                            {server.label || `Server ${index + 1}`}
-                        </button>
-                    ))}
-                </div>
-            </div>
-        )}
     </div>
   );
 };

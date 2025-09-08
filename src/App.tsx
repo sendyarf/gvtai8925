@@ -251,12 +251,9 @@ const App: React.FC = () => {
                       key={match.id} 
                       match={match}
                       status={match.status}
-                      startTime={match.startTime}
                       displayTime={match.displayTime}
                       isSelected={selectedMatch?.id === match.id}
-                      isActiveStream={selectedMatch?.id === match.id && activeStreamUrl !== null}
                       onSelect={() => handleSelectMatch(match)}
-                      onWatch={handleWatchStream}
                     />
                 ))}
               </div>
