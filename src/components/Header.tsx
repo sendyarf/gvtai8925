@@ -26,52 +26,76 @@ interface HeaderProps {
     onSearchChange: (query: string) => void;
 }
 
+const NEW_YEAR_GIF_URL = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9PW_VYcRCOZG9O2nTwVTbhQ6cnbVLVbxCwZaZS9ONaPGIkpsAOnmpWpfuudPl5pkujsIju40ZXfcY5W6NsNr4BEWtH6mt45qRz6IC3hjpF42C4vBmM1FOA8KtJJW8VAOx4Q2NrGBKs1YDFxE5CVazCDb_rgZonN1Ai4CxkjsrY5aK7FnVuSQG14QIrqAc/s1600/Generated%20video%201.gif';
+
 export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
+  // FOR TESTING: Always show the background.
+  // To make it dynamic, you would use logic like this:
+  // const isNewYearPeriod = () => {
+  //   const now = new Date();
+  //   const month = now.getMonth(); // 0-11
+  //   const day = now.getDate();
+  //   return (month === 11 && day === 31) || (month === 0 && day <= 2);
+  // };
+  const showNewYearBackground = true; // Set to true for permanent testing
+
   return (
-    <header className="p-4 border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold text-text-primary">
-            GOVOET
-          </h1>
+    <header className="border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10 overflow-hidden">
+      {showNewYearBackground && (
+        <>
+            <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${NEW_YEAR_GIF_URL})` }}
+                aria-hidden="true"
+            ></div>
+            <div className="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+        </>
+      )}
+      <div className="relative z-10 p-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-text-primary">
+              GOVOET
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+              <a 
+                  href="https://saweria.co/justfutball" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  title="Dukung kami di Saweria"
+                  className="text-text-secondary hover:text-secondary-accent transition-colors"
+                  aria-label="Dukung kami di Saweria"
+              >
+                  <HeartIcon className="w-6 h-6" />
+              </a>
+              <a 
+                  href="https://t.me/FootySch" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  title="Gabung saluran Telegram kami"
+                  className="text-text-secondary hover:text-secondary-accent transition-colors"
+                  aria-label="Gabung saluran Telegram kami"
+              >
+                  <TelegramIcon className="w-6 h-6" />
+              </a>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-            <a 
-                href="https://saweria.co/justfutball" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                title="Dukung kami di Saweria"
-                className="text-text-secondary hover:text-secondary-accent transition-colors"
-                aria-label="Dukung kami di Saweria"
-            >
-                <HeartIcon className="w-6 h-6" />
-            </a>
-            <a 
-                href="https://t.me/FootySch" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                title="Gabung saluran Telegram kami"
-                className="text-text-secondary hover:text-secondary-accent transition-colors"
-                aria-label="Gabung saluran Telegram kami"
-            >
-                <TelegramIcon className="w-6 h-6" />
-            </a>
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <SearchIcon className="h-5 w-5 text-text-secondary" />
+          </div>
+          <input
+              type="search"
+              name="search"
+              id="search"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="block w-full rounded-md border-0 bg-surface py-2.5 pl-10 pr-3 text-text-primary ring-1 ring-inset ring-white/10 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm sm:leading-6 transition-all"
+              placeholder="Search by team or league..."
+              aria-label="Search matches"
+          />
         </div>
-      </div>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <SearchIcon className="h-5 w-5 text-text-secondary" />
-        </div>
-        <input
-            type="search"
-            name="search"
-            id="search"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="block w-full rounded-md border-0 bg-surface py-2.5 pl-10 pr-3 text-text-primary ring-1 ring-inset ring-white/10 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm sm:leading-6 transition-all"
-            placeholder="Search by team or league..."
-            aria-label="Search matches"
-        />
       </div>
     </header>
   );
