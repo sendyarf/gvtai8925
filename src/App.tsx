@@ -191,7 +191,9 @@ const App: React.FC = () => {
   }, [isDesktop]);
 
   const handleWatchStream = useCallback((url: string) => {
-    setActiveStreamUrl(url);
+    // Automatically upgrade http URLs to https to prevent mixed content issues.
+    const secureUrl = url.startsWith('http://') ? url.replace('http://', 'https://') : url;
+    setActiveStreamUrl(secureUrl);
     if (!isDesktop) {
       setMobileView('player');
     }
