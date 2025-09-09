@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) =
   const showNewYearBackground = isNewYearPeriod();
 
   return (
-    <header className="border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10 overflow-hidden">
+    <header className="border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10">
       {showNewYearBackground && (
         <>
             <div 
