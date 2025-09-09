@@ -82,49 +82,55 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Effect for fetching schedule: initial load + polling every 5 minutes
+  // Effect for the initial schedule load. Runs only once on component mount.
   useEffect(() => {
-    const fetchSchedule = async (isInitialLoad = false) => {
-      if (isInitialLoad) {
-        setIsLoading(true);
-        setError(null);
-      }
+    const fetchInitialSchedule = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
         const response = await fetch(SCHEDULE_URL);
         if (!response.ok) {
-          if (isInitialLoad) throw new Error(`Failed to load schedule: ${response.statusText}`);
-          return; // Fail silently on auto-update
+          throw new Error(`Failed to load schedule: ${response.statusText}`);
+        }
+        const data: Match[] = await response.json();
+        setAllMatches(data);
+      } catch (err) {
+        console.error("Failed to fetch schedule:", err);
+        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchInitialSchedule();
+  }, []);
+
+  // Effect for polling for new schedule data in the background.
+  useEffect(() => {
+    const checkForUpdates = async () => {
+      if (document.hidden) return; // Don't fetch if tab is not visible
+      try {
+        const response = await fetch(SCHEDULE_URL);
+        if (!response.ok) {
+          console.error("Auto-update failed: bad response");
+          return;
         }
         const data: Match[] = await response.json();
         
-        if (isInitialLoad) {
-          setAllMatches(data);
-        } else {
-          // On auto-update, check if data is actually new before showing notification
-          if (JSON.stringify(data) !== JSON.stringify(allMatches)) {
-            setNewScheduleData(data);
-          }
+        // Only show notification if data is different and there isn't a pending update notification
+        if (JSON.stringify(data) !== JSON.stringify(allMatches) && !newScheduleData) {
+          setNewScheduleData(data);
         }
       } catch (err) {
-        if (isInitialLoad) {
-          console.error("Failed to fetch schedule:", err);
-          setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-        } else {
-          console.error("Auto-update failed:", err);
-        }
-      } finally {
-        if (isInitialLoad) setIsLoading(false);
+        console.error("Auto-update failed:", err);
       }
     };
 
-    fetchSchedule(true); // Initial fetch
-
-    const intervalId = setInterval(() => fetchSchedule(false), 300000); // Poll every 5 minutes
+    const intervalId = setInterval(checkForUpdates, 300000); // Poll every 5 minutes
 
     return () => clearInterval(intervalId);
-  }, [allMatches]);
+  }, [allMatches, newScheduleData]);
 
-  // Effect for processing matches and preserving selection
+  // Effect for processing matches (calculating status, etc.) and handling timers.
   useEffect(() => {
     const timer = setInterval(() => {
       if (allMatches.length === 0) return;
