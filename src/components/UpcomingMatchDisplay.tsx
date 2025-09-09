@@ -16,7 +16,7 @@ interface UpcomingMatchDisplayProps {
 
 export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ match, onClose }) => {
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-surface lg:rounded-lg lg:border-2 lg:border-dashed lg:border-white/10 p-6 sm:p-12 lg:p-16 relative">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-surface lg:rounded-lg lg:border-2 lg:border-dashed lg:border-white/10 p-6 sm:p-12 lg:py-16 lg:px-24 relative">
             <button 
                 onClick={onClose}
                 className="lg:hidden absolute top-4 left-4 flex items-center gap-1 text-sm text-text-secondary hover:text-secondary-accent transition-colors z-10"
