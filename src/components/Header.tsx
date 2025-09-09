@@ -29,15 +29,15 @@ interface HeaderProps {
 const NEW_YEAR_GIF_URL = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhTrt56JP0cCdSAgkZhyphenhyphenci9Wgu1ou3f8A3W2uOc0KOrRqqy3O0ZEtcKbrajhSKFGItI0yo1D0uANAHj1RljwScJlPjuxXF6p4I-kL7iKTh8oAwH3isB-oQof8jc-YTtE3q78rUZXk-1I0XHC7gfOcGMWkCkrTfVMFXoXBBxkR2Nfkzzbojxlz8tD-r6DRre/s1600/kembangapi.gif';
 
 export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
- // const isNewYearPeriod = () => {
-  //  const now = new Date();
-  //  const month = now.getMonth(); // 0-11 (December is 11)
-   // const day = now.getDate();
+  const isNewYearPeriod = () => {
+    const now = new Date();
+    const month = now.getMonth(); // 0-11 (December is 11)
+    const day = now.getDate();
     // Show from Dec 31st to Jan 2nd
-   // return (month === 11 && day === 31) || (month === 0 && day <= 2);
+    return (month === 11 && day === 31) || (month === 0 && day <= 2);
   };
   
-  const showNewYearBackground = true;
+  const showNewYearBackground = isNewYearPeriod();
 
   return (
     <header className="border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10 overflow-hidden">
