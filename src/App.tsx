@@ -254,7 +254,7 @@ const App: React.FC = () => {
   const sortedDates = Object.keys(groupedMatches).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
   const SchedulePanel = (
-      <aside className="w-full lg:w-[35%] lg:max-w-md xl:max-w-lg bg-background lg:border-l lg:border-white/10 flex flex-col h-screen">
+      <aside className="w-full lg:w-[35%] lg:max-w-md xl:max-w-lg bg-background lg:border-l lg:border-white/10 flex flex-col h-dvh">
         <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
         {newScheduleData && (
           <div className="p-4 border-b border-white/10">
@@ -306,7 +306,7 @@ const App: React.FC = () => {
   );
 
   const PlayerPanel = (
-       <main className="w-full flex-1 flex items-center justify-center p-0 lg:p-4 bg-background h-screen">
+       <main className="w-full flex-1 flex items-center justify-center p-0 lg:p-4 bg-background h-dvh">
           {selectedMatch?.status === 'upcoming' ? (
             <UpcomingMatchDisplay match={selectedMatch} onClose={handleClosePlayer} />
           ) : (
@@ -322,14 +322,14 @@ const App: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-background font-sans text-text-primary">
+    <div className="min-h-dvh bg-background font-sans text-text-primary">
       {isDesktop ? (
-          <div className="flex flex-row h-screen">
+          <div className="flex flex-row h-dvh">
               {PlayerPanel}
               {SchedulePanel}
           </div>
       ) : (
-          <div className="h-screen">
+          <div className="h-dvh">
               {mobileView === 'schedule' ? SchedulePanel : PlayerPanel}
           </div>
       )}
