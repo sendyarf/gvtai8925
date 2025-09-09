@@ -69,7 +69,7 @@ const App: React.FC = () => {
   const [mobileView, setMobileView] = useState<'schedule' | 'player'>('schedule');
   const [searchQuery, setSearchQuery] = useState('');
   const [initialMatchId, setInitialMatchId] = useState<string | null>(null);
-  const [showUpdateToast, setShowUpdateToast] = useState(false);
+  const [newScheduleData, setNewScheduleData] = useState<Match[] | null>(null);
 
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
@@ -96,11 +96,14 @@ const App: React.FC = () => {
           return; // Fail silently on auto-update
         }
         const data: Match[] = await response.json();
-        setAllMatches(data);
-
-        if (!isInitialLoad) {
-          setShowUpdateToast(true);
-          setTimeout(() => setShowUpdateToast(false), 3000); // Toast visible for 3 seconds
+        
+        if (isInitialLoad) {
+          setAllMatches(data);
+        } else {
+          // On auto-update, check if data is actually new before showing notification
+          if (JSON.stringify(data) !== JSON.stringify(allMatches)) {
+            setNewScheduleData(data);
+          }
         }
       } catch (err) {
         if (isInitialLoad) {
@@ -119,7 +122,7 @@ const App: React.FC = () => {
     const intervalId = setInterval(() => fetchSchedule(false), 300000); // Poll every 5 minutes
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [allMatches]);
 
   // Effect for processing matches and preserving selection
   useEffect(() => {
@@ -215,6 +218,18 @@ const App: React.FC = () => {
       setMobileView('schedule');
   }, []);
 
+  const handleApplyUpdate = () => {
+    if (newScheduleData) {
+      setAllMatches(newScheduleData);
+      setNewScheduleData(null);
+      // Scroll to the top of the schedule list to see new matches
+      const scheduleList = document.getElementById('schedule-list');
+      if (scheduleList) {
+        scheduleList.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
   const filteredMatches = useMemo(() => {
     if (!searchQuery.trim()) {
       return visibleMatches;
@@ -233,7 +248,21 @@ const App: React.FC = () => {
   const SchedulePanel = (
       <aside className="w-full lg:w-[35%] lg:max-w-md xl:max-w-lg bg-background lg:border-l lg:border-white/10 flex flex-col h-screen">
         <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-        <div className="flex-grow overflow-y-auto p-4 space-y-8">
+        {newScheduleData && (
+          <div className="p-4 border-b border-white/10">
+            <button
+              onClick={handleApplyUpdate}
+              className="w-full flex items-center justify-center gap-2 text-center py-2.5 px-4 text-sm bg-accent rounded-md text-background hover:bg-secondary-accent transition-all duration-200 font-semibold"
+              title="Load new matches"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.204 2.103l-1.123.562a.75.75 0 01-.983-.983l.562-1.123a5.5 5.5 0 018.64-4.825.75.75 0 011.108.966l-1.11 2.221a.75.75 0 01-1.341.22l-.427-.852a3.001 3.001 0 00-4.633-2.22.75.75 0 01-1.23-.615A5.503 5.503 0 0112 5.5a5.5 5.5 0 015.488 5.076.75.75 0 01-.86.948l-1.316-.263zM4.688 8.576a5.5 5.5 0 019.204-2.103l1.123-.562a.75.75 0 11.983.983l-.562 1.123a5.5 5.5 0 01-8.64 4.825.75.75 0 01-1.108-.966l1.11-2.221a.75.75 0 011.341-.22l.427.852a3.001 3.001 0 004.633 2.22.75.75 0 011.23.615A5.503 5.503 0 018 14.5a5.5 5.5 0 01-5.488-5.076.75.75 0 01.86-.948l1.316.263z" clipRule="evenodd" />
+              </svg>
+              Jadwal baru tersedia, klik untuk memuat.
+            </button>
+          </div>
+        )}
+        <div id="schedule-list" className="flex-grow overflow-y-auto p-4 space-y-8">
           {isLoading && <LoadingSpinner />}
           {error && <ErrorMessage message={error} />}
           {!isLoading && !error && sortedDates.length === 0 && (
@@ -295,15 +324,6 @@ const App: React.FC = () => {
           <div className="h-screen">
               {mobileView === 'schedule' ? SchedulePanel : PlayerPanel}
           </div>
-      )}
-
-      {/* Toast Notification */}
-      {showUpdateToast && (
-        <div className="fixed bottom-4 right-4 z-50 animate-fade-in-out">
-          <div className="bg-accent text-background font-semibold px-4 py-2 rounded-lg shadow-lg">
-            Jadwal telah diperbarui.
-          </div>
-        </div>
       )}
     </div>
   );
