@@ -25,7 +25,7 @@ export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ matc
                 Schedule
             </button>
             
-            <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-y-8 lg:gap-x-16">
+            <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-y-8 lg:gap-x-16 items-center">
                 
                 {/* Left Column: Time Info */}
                 <div className="flex flex-col items-center text-center lg:items-start lg:text-left pt-12 lg:pt-0">
@@ -42,11 +42,11 @@ export const UpcomingMatchDisplay: React.FC<UpcomingMatchDisplayProps> = ({ matc
                 </div>
 
                 {/* Right Column: Match Info */}
-                <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+                <div className="flex flex-col items-center text-center lg:items-end lg:text-right">
                     <span className="text-xl font-medium text-text-primary">{match.league}</span>
-                    <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
-                        <img src={match.team1.logo} alt={match.team1.name} className="w-50 h-50 object-contain"/>
-                        <img src={match.team2.logo} alt={match.team2.name} className="w-50 h-50 object-contain"/>
+                    <div className="flex items-center justify-center lg:justify-end gap-4 mt-8">
+                        <img src={match.team1.logo} alt={match.team1.name} className="w-24 h-24 object-contain"/>
+                        <img src={match.team2.logo} alt={match.team2.name} className="w-24 h-24 object-contain"/>
                     </div>
                 </div>
             </div>
