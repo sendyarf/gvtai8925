@@ -1,11 +1,5 @@
 import React from 'react';
 
-const GovoetLogo: React.FC<{ className?: string }> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
-        <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.236L19.098 8 12 11.764 4.902 8 12 4.236zM4 9.655V17l8 4v-8.345L4 9.655zm16 0L12 12.655V21l8-4V9.655z"></path>
-    </svg>
-);
-
 // Icon for Saweria (Support/Donation)
 const HeartIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -37,7 +31,6 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) =
     <header className="p-4 border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <GovoetLogo className="w-8 h-8 text-accent" />
           <h1 className="text-3xl font-bold text-text-primary">
             GOVOET
           </h1>
