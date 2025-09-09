@@ -99,6 +99,7 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
                     className="w-full h-full border-0"
                     allow="encrypted-media; autoplay; fullscreen"
                     allowFullScreen
+                    scrolling="no"
                 ></iframe>
             </div>
 
