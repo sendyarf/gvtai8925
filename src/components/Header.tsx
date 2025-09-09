@@ -29,15 +29,15 @@ interface HeaderProps {
 const NEW_YEAR_GIF_URL = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9PW_VYcRCOZG9O2nTwVTbhQ6cnbVLVbxCwZaZS9ONaPGIkpsAOnmpWpfuudPl5pkujsIju40ZXfcY5W6NsNr4BEWtH6mt45qRz6IC3hjpF42C4vBmM1FOA8KtJJW8VAOx4Q2NrGBKs1YDFxE5CVazCDb_rgZonN1Ai4CxkjsrY5aK7FnVuSQG14QIrqAc/s1600/Generated%20video%201.gif';
 
 export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange }) => {
-  // FOR TESTING: Always show the background.
-  // To make it dynamic, you would use logic like this:
-  // const isNewYearPeriod = () => {
-  //   const now = new Date();
-  //   const month = now.getMonth(); // 0-11
-  //   const day = now.getDate();
-  //   return (month === 11 && day === 31) || (month === 0 && day <= 2);
-  // };
-  const showNewYearBackground = true; // Set to true for permanent testing
+  const isNewYearPeriod = () => {
+    const now = new Date();
+    const month = now.getMonth(); // 0-11 (December is 11)
+    const day = now.getDate();
+    // Show from Dec 31st to Jan 2nd
+    return (month === 11 && day === 31) || (month === 0 && day <= 2);
+  };
+  
+  const showNewYearBackground = isNewYearPeriod();
 
   return (
     <header className="border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-md z-10 overflow-hidden">
