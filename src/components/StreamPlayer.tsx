@@ -106,14 +106,14 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({ match, streamUrl, on
             {/* Server Switcher Footer */}
             <div className="bg-surface p-3 lg:border-t lg:border-white/10">
                 <p className="text-xs text-text-secondary mb-2 font-semibold uppercase tracking-wider text-center lg:text-left">Switch Server</p>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-1.5">
                     {match.servers.map((server, index) => {
                         const isActive = server.url === streamUrl;
                         return (
                              <button
                                 key={index}
                                 onClick={() => onWatchStream(server.url)}
-                                className={`block text-center py-2 px-1 text-xs sm:text-sm rounded-md transition-all duration-200 font-medium truncate ${
+                                className={`block text-center py-1.5 px-2 text-xs rounded-md transition-all duration-200 font-medium truncate ${
                                     isActive 
                                     ? 'bg-accent text-background cursor-default' 
                                     : 'bg-white/5 text-text-primary hover:bg-secondary-accent hover:text-background focus:outline-none focus:ring-2 focus:ring-accent'
